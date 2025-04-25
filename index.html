@@ -23,13 +23,6 @@
       background-repeat: no-repeat;
     }
 
-    /* Different font for mobile */
-    @media (max-width: 768px) {
-      body {
-        font-family: "Verdana", sans-serif;
-      }
-    }
-
     /* Overlay transparency for background image */
     body::before {
       content: '';
@@ -146,6 +139,34 @@
     /* Show active language */
     .lang.active {
       display: block;
+    }
+
+    /* Different font for mobile */
+    @media (max-width: 768px) {
+      body {
+        font-family: "Verdana", sans-serif;
+      }
+
+      .columns {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .column {
+        max-width: 90%;
+        width: 100%;
+      }
+
+      table {
+        width: 100%;
+      }
+
+      td,
+      th {
+        font-size: 14px;
+        word-wrap: break-word;
+        white-space: normal;
+      }
     }
   </style>
 </head>
