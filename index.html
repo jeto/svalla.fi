@@ -71,12 +71,23 @@
       font-weight: bold;
     }
 
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -150%) scale(1.6);
+      }
+    }
+
     .heart {
       position: absolute;
-      width: 0;
-      height: 0;
-      transform: translate(-50%, -50%) scale(0.6);
       pointer-events: none;
+      animation: floatUp 1.5s ease-out forwards;
+      z-index: 9999;
     }
 
     .heart::before,
@@ -88,6 +99,7 @@
       background-color: #fa4d4d;
       border-radius: 10px 10px 0 0;
       transform: rotate(-45deg);
+      transform-origin: center;
     }
 
     .heart::after {
@@ -413,25 +425,40 @@
 
   <!-- Mouse trail script -->
   <script>
-    function switchLanguage(lang) {
-      document.querySelectorAll('.lang').forEach((el) => {
-        el.classList.remove('active');
-      });
-      document.getElementById(`lang-${lang}`).classList.add('active');
-    }
+    let lastHeartTime = 0;
 
-    document.addEventListener('mousemove', function (e) {
-      let heart = document.createElement('div');
+    function showHeart(x, y) {
+      const now = Date.now();
+      if (now - lastHeartTime < 50) return; // limit to 1 per 100ms
+      lastHeartTime = now;
+
+      const heart = document.createElement('div');
       heart.className = 'heart';
-      heart.style.left = e.pageX + 'px';
-      heart.style.top = e.pageY + 'px';
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+      heart.innerHTML = `
+        <svg viewBox="0 0 32 29.6" width="20" height="20" fill="#fa4d4d" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.3,16,21.2,16,21.2s16-11.9,16-21.2 C32,3.8,28.2,0,23.6,0z"/>
+        </svg>
+      `;
       document.body.appendChild(heart);
 
-      setTimeout(function () {
+      setTimeout(() => {
         heart.remove();
-      }, 500); // Hearts disappear after 500ms
+      }, 1500); // match CSS animation time
+    }
+
+    document.addEventListener('mousemove', (e) => showHeart(e.pageX, e.pageY));
+    document.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      if (touch) showHeart(touch.pageX, touch.pageY);
+    });
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      if (touch) showHeart(touch.pageX, touch.pageY);
     });
   </script>
+
 
 </body>
 
