@@ -425,6 +425,12 @@
 
   <!-- Mouse trail script -->
   <script>
+    function switchLanguage(lang) {
+      document.querySelectorAll('.lang').forEach((el) => {
+        el.classList.remove('active');
+      });
+      document.getElementById(`lang-${lang}`).classList.add('active');
+    }
     let lastHeartTime = 0;
 
     function showHeart(x, y) {
